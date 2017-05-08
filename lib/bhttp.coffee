@@ -5,6 +5,7 @@
 
 # Core modules
 urlUtil = require "url"
+{ URL, URLSearchParams } = require 'universal-url'
 querystring = require "querystring"
 stream = require "stream"
 http = require "http"
@@ -155,7 +156,7 @@ prepareUrl = (request, response, requestState) ->
 	debugRequest "preparing URL"
 	Promise.try ->
 		# Parse the specified URL, and use the resulting information to build a complete `options` object
-		urlOptions = urlUtil.parse request.url, true
+		urlOptions = new URL request.url
 
 		_.extend request.options, {hostname: urlOptions.hostname, port: urlOptions.port}
 		request.options.path = urlUtil.format {pathname: urlOptions.pathname, query: request.options.query ? urlOptions.query}
