@@ -159,7 +159,7 @@ prepareUrl = (request, response, requestState) ->
 		urlOptions = new URL request.url
 
 		_.extend request.options, {hostname: urlOptions.hostname, port: urlOptions.port}
-		request.options.path = urlUtil.format {pathname: urlOptions.pathname, query: request.options.query ? urlOptions.query}
+		request.options.path = urlOptions.pathname + urlOptions.search
 		request.protocol = S(urlOptions.protocol).chompRight(":").toString()
 
 		Promise.resolve [request, response, requestState]
