@@ -436,7 +436,9 @@ processResponse = (request, response, requestState) ->
 
 		if response.statusCode in [301, 302, 303, 307] and request.responseOptions.followRedirects
 			if requestState.redirectHistory.length >= (request.responseOptions.redirectLimit - 1)
-				return Promise.reject addErrorData(new bhttpErrors.RedirectError("The maximum amount of redirects ({request.responseOptions.redirectLimit}) was reached."))
+				redirects = requestState.redirectHistory.map (x) ->
+					return '  - ' + x.request.url
+				return Promise.reject addErrorData(new bhttpErrors.RedirectError("The maximum amount of redirects ({request.responseOptions.redirectLimit}) was reached:\n" + redirects.join('\n')))
 
 			# 301: For GET and HEAD, redirect unchanged. For POST, PUT, PATCH, DELETE, "ask user" (in our case: throw an error.)
 			# 302: Redirect, change method to GET.
